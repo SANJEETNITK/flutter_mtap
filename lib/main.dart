@@ -35,15 +35,17 @@ class MyApp extends StatelessWidget {
     // ),
 
     body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome to the flutter world'),
+            Text('Welcome'),
             FlatButton(
               onPressed: () {},
               child: Text(
-                'click me'
+                  'click me'
               ),
               color: Colors.green,
             ),
@@ -56,19 +58,20 @@ class MyApp extends StatelessWidget {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Flutter is beautiful'),
+            Text('Welcome'),
             FlatButton(
               onPressed: () {},
               child: Text(
-                  'Press'
+                  'click me'
               ),
               color: Colors.green,
             ),
             Container(
               color: Colors.cyan,
               // child: SizedBox(width: 20.0, height: 40.0,),
-              child: Text('Inside the container widget'),
+              child: Text('Inside a container'),
             ),
           ],
         ),
