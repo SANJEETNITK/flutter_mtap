@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(Calculator());
+  runApp(Calculator(email: "Hello"));
 }
 
 class Calculator extends StatelessWidget {
-  const Calculator({Key? key}) : super(key: key);
+
+  final String email;
+  const Calculator({Key? key, required String this.email}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

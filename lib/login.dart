@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mtap/calc.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,6 +21,9 @@ class LoginDemo extends StatefulWidget {
 }
 
 class _LoginDemoState extends State<LoginDemo> {
+
+  TextEditingController emailController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +50,11 @@ class _LoginDemoState extends State<LoginDemo> {
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com'),
+                    hintText: 'Enter your email'),
               ),
             ),
             Padding(
@@ -81,8 +86,18 @@ class _LoginDemoState extends State<LoginDemo> {
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
               child: FlatButton(
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage()));
+                  String emailValidationRegex = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
+                  String email = emailController.text;
+                  bool emailValid = RegExp(emailValidationRegex).hasMatch(email);
+
+                  if (emailValid) {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => Calculator(email: email)));
+                  } else {
+                    final snackBar = SnackBar(content: Text('Please enter a valid email!'), backgroundColor: Colors.red, );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+
                 },
                 child: Text(
                   'Login',
