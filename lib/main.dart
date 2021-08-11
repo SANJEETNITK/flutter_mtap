@@ -36,43 +36,38 @@ class MyApp extends StatelessWidget {
 
     body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome'),
-            FlatButton(
-              onPressed: () {},
-              child: Text(
-                  'click me'
+            SizedBox(
+              width: 300,
+              height: 60,
+              child:
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Full Name',
+                  ),
+
+                ),
               ),
-              color: Colors.green,
-            ),
-            Container(
-              color: Colors.cyan,
-              // child: SizedBox(width: 20.0, height: 40.0,),
-              child: Text('Inside a container'),
-            ),
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome'),
-            FlatButton(
+            RaisedButton(
               onPressed: () {},
               child: Text(
-                  'click me'
+                'Login',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  backgroundColor: Colors.blue,
+                  color: Colors.white,
+                ),
               ),
-              color: Colors.green,
-            ),
-            Container(
-              color: Colors.cyan,
-              // child: SizedBox(width: 20.0, height: 40.0,),
-              child: Text('Inside a container'),
-            ),
+
+            )
           ],
         ),
       ],
@@ -94,3 +89,5 @@ class MyApp extends StatelessWidget {
 
   }
 }
+
+
