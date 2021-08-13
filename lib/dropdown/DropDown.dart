@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+
+class DropDownDemo extends StatefulWidget {
+  @override
+  _DropDownDemoState createState() => _DropDownDemoState();
+}
+
+class _DropDownDemoState extends State<DropDownDemo> {
+  String _chosenValue = "";
+
+  List<String> _languages = <String>[
+    'Android',
+    'IOS',
+    'Flutter',
+    'Node',
+    'Java',
+    'Python',
+    'PHP',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('DropDown'),
+      ),
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(0.0),
+          child: DropdownButton<String>(
+            hint: Text('Choose your favourite language'),
+            value: _chosenValue,
+            items: _languages.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: new Text(value),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                _chosenValue = value!;
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
