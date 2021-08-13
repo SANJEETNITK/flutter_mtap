@@ -114,88 +114,71 @@ class ListDogApp extends StatefulWidget {
 }
 
 class _State extends State<ListDogApp> {
-  final List<int> ids = <int>[0, 1, 2, 3, 4, 5, 6,  7, 8];
-  final List<String> names = <String>['Aby', 'Aish', 'Ayan', 'Ben', 'Bob', 'Charlie', 'Cook', 'Carline'];
-  final List<int> msgCount = <int>[2, 0, 10, 6, 52, 4, 0, 2];
 
-  // DogDao dogDao = new DogDao();
-  // Database database = DogDao().openDb() as Database;
+  List<Dog> dogsList = <Dog>[];
 
-  // List<Dog> dogs = dogDao.getDogs();
-  // List<Dog> dogs = await dogDao.getDogs();
-
-  Future<List<Dog>> _getDogsList() async {
-    DatabaseHelper _databaseHelper = new DatabaseHelper();
-    List<Dog> dogsList = await _databaseHelper.getDogs();
-    return dogsList;
+  void _setDogsList() async {
+    _getDogsList().then((value) => setState((){
+      this.dogsList = value;
+    }));
   }
 
+  Future<List<Dog>> _getDogsList() async{
+    DatabaseHelper _databaseHelper = new DatabaseHelper();
+    return await _databaseHelper.getDogs();
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    var dogsList = _getDogsList() as List<Dog>;
+    // List<Dog> dogsList = ModalRoute.of(context)!.settings.arguments as List<Dog>;
+    _setDogsList();
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Flutter Tutorial - googleflutter.com'),
+          title: Text('Dogs list + ${dogsList.length}'),
         ),
         body: ListView.builder(
-          itemCount: dogsList.length ,
+          itemCount: dogsList.length,
           itemBuilder: (BuildContext context,int index){
-            return new ListTile(
-              title: new Text(
-                dogsList[index].name +
-                    "                    " +
-                    dogsList[index].id.toString() +
-                    "                    " +
-                    dogsList[index].age.toString(),
-              ),
+            // return new ListTile(
+            //   title: new Text(
+            //     dogsList[index].name +
+            //      " " +
+            //         dogsList[index].id.toString() +
+            //         " " +
+            //         dogsList[index].age.toString(),
+            //   ),
+            // );
+            return new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  dogsList[index].id.toString(),
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  dogsList[index].name,
+                    style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.blue,
+                  ),
+                ),
+                Text(
+                  dogsList[index].age.toString(),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
             );
           }
         ),
-        // body: FutureBuilder<List>(
-        //     future: dogDao.getDogs(),
-        //     initialData: [],
-        //     builder: (context, snapshot) {
-        //       return snapshot.hasData
-        //           ? new ListView.builder(                             //if
-        //         padding: const EdgeInsets.all(10.0),
-        //         itemCount: snapshot.data!.length,
-        //         itemBuilder: (context, i) {
-        //           return _buildRow(snapshot.data![i]);
-        //         },
-        //       )
-        //           : Center(                                         //else
-        //         child: CircularProgressIndicator(),
-        //       );
-        //     // itemBuilder: (BuildContext context, int index) {
-        //     //   return Container(
-        //     //     height: 50,
-        //     //     margin: EdgeInsets.all(2),
-        //     //     child: Row(
-        //     //         children: [
-        //     //           // Text('${dogs[index]}'),
-        //     //           Text('${ids[index]} ${names[index]} (${msgCount[index]})',
-        //     //             style: TextStyle(fontSize: 18),
-        //     //           )
-        //     //         ],
-        //     //     ),
-        //     //   );
-        //     }
-        // )
     );
   }
 
-  Widget _buildRow(Dog dog) {
-    return new ListTile(
-      title: new Text(
-          dog.name +
-              "                    " +
-              dog.id.toString() +
-              "                    " +
-              dog.age.toString(),
-          ),
-    );
-  }
 }

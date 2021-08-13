@@ -51,7 +51,6 @@ class DatabaseHelper {
           name: mapRows[index]['name'],
           age: mapRows[index]['age'],
         );
-        print(dog.toString());
         return dog;
       });
 

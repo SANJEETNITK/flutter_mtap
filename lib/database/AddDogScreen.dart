@@ -138,7 +138,7 @@ class _DogAppState extends State<DogApp> {
                   // Navigator.of(context).push(MaterialPageRoute(
                   //   builder: (context) => GetList(),
                   // ));
-                  _showDogs();
+                  // _showDogs();
                 },
                 child: Text(
                   'Show dogs list',
@@ -171,14 +171,6 @@ class _DogAppState extends State<DogApp> {
     idController.text = "";
     nameController.text = "";
     ageController.text = "";
-  }
-
-  void _showDogs() async {
-    // List<Dog> list = await _dogDao.getDogs();
-    // return list;
-
-    List<Dog> list = await _getDogs();
-    print(list);
   }
 
   Future<List<Dog>> _getDogs() async {
