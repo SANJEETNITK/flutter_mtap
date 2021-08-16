@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mtap/book/Book.dart';
-import 'package:flutter_mtap/book/BookDao.dart';
-import 'package:flutter_mtap/book/InsertBookScreen.dart';
+
+import 'Book.dart';
+import 'BookDao.dart';
+import 'InsertBookScreen.dart';
 
 class BookListScreen extends StatefulWidget {
   const BookListScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _BookListScreenState extends State<BookListScreen> {
 
   List<Book> booksList = <Book>[];
   List<Book> bookListToShow = <Book>[];
-  Widget customSearchBar = Text("Books List");
+  Widget customSearchBar = Text("Books History List");
   Widget customSearchIcon = Icon(Icons.search);
   bool isSearching = false;
 
@@ -57,43 +58,42 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-
+  Widget build(BuildContext context)  {
     return Scaffold(
       appBar: AppBar(
         title: customSearchBar,
         actions: [
           IconButton(onPressed: () {
-              setState(() {
-                if(isSearching) {
-                  customSearchIcon = Icon(Icons.cancel);
-                  customSearchBar = TextField(
-                    onChanged: (text) {
-                      searchBookList(text);
-                    },
-                    cursorColor: Colors.teal,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Search book",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      ),
-                      contentPadding: EdgeInsets.all(10.0),
-                     ),
-                    style: TextStyle(
+            setState(() {
+              if(isSearching) {
+                customSearchIcon = Icon(Icons.cancel);
+                customSearchBar = TextField(
+                  onChanged: (text) {
+                    searchBookList(text);
+                  },
+                  cursorColor: Colors.teal,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Search book",
+                    hintStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 16.0,
                     ),
-                  );
-                } else {
-                  bookListToShow = booksList;
-                  customSearchIcon = Icon(Icons.search);
-                  customSearchBar = Text("Books List");
-                }
-                isSearching = !isSearching;
-              });
-            },
+                    contentPadding: EdgeInsets.all(10.0),
+                  ),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                  ),
+                );
+              } else {
+                bookListToShow = booksList;
+                customSearchIcon = Icon(Icons.search);
+                customSearchBar = Text("Books List");
+              }
+              isSearching = !isSearching;
+            });
+          },
             icon: customSearchIcon,
           )
         ],
@@ -114,11 +114,21 @@ class _BookListScreenState extends State<BookListScreen> {
           }
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            //isSearching = false;
+            final result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => InsertBookScreen())
             );
+            if(result!=null){
+              String str = result.toString();
+              if(str=="yes"){
+                print('adding      $str');
+                _setBookList();
+              }
+            }else{
+              print('Null from intent');
+            }
           },
           child: Icon(Icons.add)
       ),
@@ -126,61 +136,61 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 
   Widget _rowContent(Book book) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Book Name:   "+book.name),
-              Text("Author Name: "+book.author),
-              Text("Price:       "+book.price.toString()),
-            ],
-          ),
-          Column(
-            children: [
-              ElevatedButton(
-                onPressed: (){
-                  _deleteBook(book.id);
-                },
-                child: Icon(Icons.delete),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue[300],
-                  onPrimary: Colors.red
+    return
+      Card(
+        margin: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Book Name:   "+book.name),
+                Text("Author Name: "+book.author),
+                Text("Price:       "+book.price.toString()),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ElevatedButton(
+                  onPressed: (){
+                    //isSearching = false;
+                    _deleteBook(book.id);
+                    _setBookList();
+                  },
+                  child: Icon(Icons.delete),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.blue[300],
+                      onPrimary: Colors.red
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => InsertBookScreen(), settings: RouteSettings(arguments: book) )
-                  );
-                },
-                child: Text("Update"), style: TextButton.styleFrom(
-                  primary: Colors.green
+                TextButton(
+                  onPressed: () async {
+                    // isSearching = false;
+                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => InsertBookScreen(), settings: RouteSettings(arguments: book) )
+                    );
+                    if(result!=null){
+                      String str = result.toString();
+                      if(str=="yes"){
+                        print('update      $str');
+                        _setBookList();
+                      }
+                    }else{
+                      print('Null from intent');
+                    }
+                  },
+                  child: Text("Update"), style: TextButton.styleFrom(
+                    primary: Colors.green
                 ),
-              )
-            ],
-          ),
+                )
+              ],
+            ),
 
-        ],
-      ),
-    );
+          ],
+        ),
+      );
   }
-
-  Widget _showHeader() {
-    return Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text("Name", style: headingStyle,),
-          Text("Author", style: headingStyle,),
-          Text("Price", style: headingStyle,),
-        ],
-      ),
-    );
-  }
-
 }
